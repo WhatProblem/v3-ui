@@ -51,3 +51,17 @@ export function compareDate(date1: Date, date2: Date) {
 	if (year1 === year2 && month1 === month2 && day1 === day2) return true
 	return false
 }
+
+export function copyDate(dates: Date) {
+	return new Date(dates)
+}
+
+export function copyDates(dates: Date | Array<Date>) {
+	if (Array.isArray(dates)) {
+		return dates.map((date)=>{
+			if (!date) return date
+			return copyDate(date)
+		})
+	}
+	return copyDate(dates)
+}

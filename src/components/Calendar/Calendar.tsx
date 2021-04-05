@@ -1,5 +1,6 @@
-import { compareMonth } from '@/utils'
-import { computed, defineComponent, provide, readonly, ref } from 'vue'
+import { compareMonth, copyDates } from '@/utils'
+import { computed, defineComponent, provide, reactive, readonly, ref } from 'vue'
+import { CalendarDayItem } from './calendar.interface'
 import CalendarHearder from './CalendarHearder'
 import CalendarMonth from './CalendarMonth'
 import './index.scss'
@@ -26,10 +27,26 @@ export default defineComponent({
 		className: {
 			type: String,
 			default: 'custom-day'
-		}
+		},
+		defaultDate: [Date, Array] as any,
 	},
 
+	// 定义通信事件名
+	emits: ['select', 'confirm'],
+
 	setup(props, { emit, slots, attrs }) {
+		// 初始化日期
+		const getInitialDate = (defaultDate = props.defaultDate) => {
+			const { minDate, maxDate } = props
+
+			if (!defaultDate) return defaultDate
+		}
+
+		// 初始化响应式变量
+		const state = reactive({
+			subtitle: '',
+			currentDate: getInitialDate()
+		})
 
 		if (props.className) {
 			const className = ref(props.className)
@@ -54,13 +71,34 @@ export default defineComponent({
 		// date.getDay() 周日 => 0
 		const dayOffset = computed(() => props.firstDayOfWeek ? +props.firstDayOfWeek % 7 : 0)
 
+		const onClickDay = (item: CalendarDayItem) => {
+			const { date } = item
+			const { currentDate } = state
+
+			select(date, true)
+		}
+
+		const onConfirm = () => emit('confirm', copyDates(state.currentDate))
+
+		const select = (date: Date | Array<Date>, complete?: boolean) => {
+			const setCurrentDate = (date: Date | Array<Date>) => {
+				state.currentDate = date
+				emit('select', copyDates(state.currentDate))
+			}
+
+			setCurrentDate(date)
+			if (complete) {
+				onConfirm()
+			}
+		}
+
 		// 渲染对应的月份的函数
 		const renderMonth = (date: Date, index: number) => {
 			// const showMonthTitle = index !== 0
 			const showMonthTitle = true
 
 			return (
-				<CalendarMonth date={date} showMonthTitle={showMonthTitle} firstDayOfWeek={dayOffset.value} />
+				<CalendarMonth onClick={onClickDay} date={date} showMonthTitle={showMonthTitle} firstDayOfWeek={dayOffset.value} />
 			)
 		}
 

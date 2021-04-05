@@ -14,8 +14,12 @@ export default defineComponent({
 			type: Number,
 			default: 0
 		},
-		index: Number
+		index: Number,
+		onClick: Function,
 	},
+
+	// 定义事件名
+	emits: ['click'],
 
 	setup(props, {emit, slots, attrs}) {
 		const className: ComponentPublicInstance<any, {}> = inject('className')
@@ -37,9 +41,13 @@ export default defineComponent({
 			return Nodes
 		}
 
+		const onClick = () => {
+			emit('click', props.item)
+		}
+
 		return () => (
 			// const {className} = props.item
-			<div role="gridcell" style={style.value} class={["calendar-day", className.value, props.item.className]}>
+			<div onClick={onClick} role="gridcell" style={style.value} class={["calendar-day", className.value, props.item.className]}>
 				{renderContent()}
 			</div>
 		)

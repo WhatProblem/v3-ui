@@ -18,8 +18,13 @@ export default defineComponent({
 		firstDayOfWeek: {
 			type: Number,
 			required: true
-		}
+		},
+		onClick: Function
 	},
+
+	// 定义事件名
+	emits: ['click'],
+
 	setup(props, { emit, slots, attrs }) {
 		// 获取指定格式日期
 		const title = computed(() => formatMonthTitle(props.date))
@@ -65,7 +70,7 @@ export default defineComponent({
 		// 渲染每一天
 		const renderDay = (item: CalendarDayItem, index: number) => {
 			return (
-				<CalendarDay item={item} index={index} offset={offset.value} />
+				<CalendarDay onClick={ (item: CalendarDayItem) => emit('click', item)} item={item} index={index} offset={offset.value} />
 			)
 		}
 
