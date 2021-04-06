@@ -1,7 +1,7 @@
 import { compareDate, formatMonthTitle, getMonthEndDay } from '@/utils'
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import CalendarDay from './CalendarDay'
-import { CalendarDayItem } from './calendar.interface'
+import { CalendarDayItem, CalendarDayType } from './calendar.interface'
 import './index.scss'
 
 export default defineComponent({
@@ -19,7 +19,9 @@ export default defineComponent({
 			type: Number,
 			required: true
 		},
-		onClick: Function
+		onClick: Function,
+		type: String as PropType<CalendarDayType>,
+		currentDate: [String, Array] as PropType<Date | Date[]>
 	},
 
 	// 定义事件名
@@ -48,6 +50,15 @@ export default defineComponent({
 			return realDay
 		})
 
+		const getDayType = (day: Date): CalendarDayType => {
+			const {type, currentDate} = props
+
+			if (type === 'single') {
+				return compareDate(day, currentDate as Date) ? 'selected' : ''
+			}
+			return ''
+		}
+
 		// 每月天数
 		const days = computed(() => {
 			const days: Array<CalendarDayItem> = []
@@ -56,9 +67,11 @@ export default defineComponent({
 
 			for (let day = 1; day <= totalDay.value; day++) {
 				const date = new Date(year, month, day)
+				const type = getDayType(date)
 
 				let config: CalendarDayItem = {
 					date,
+					type,
 					text: day,
 					className: compareDate(date, new Date()) ? 'selected-day' : ''
 				}

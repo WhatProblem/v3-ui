@@ -35,9 +35,14 @@ export default defineComponent({
 
 		// 具体内容定义
 		const renderContent=()=>{
-			const { text } = props.item
+			const { text, type } = props.item
 
 			const Nodes = [text]
+			if (type === 'selected') {
+				return (
+					<div class="selected">{Nodes}</div>
+				)
+			}
 			return Nodes
 		}
 

@@ -28,7 +28,10 @@ export default defineComponent({
 			type: String,
 			default: 'custom-day'
 		},
-		defaultDate: [Date, Array] as any,
+		defaultDate: {
+			type: [Date, Array] as any,
+			default: new Date()
+		},
 	},
 
 	// 定义通信事件名
@@ -38,7 +41,6 @@ export default defineComponent({
 		// 初始化日期
 		const getInitialDate = (defaultDate = props.defaultDate) => {
 			const { minDate, maxDate } = props
-
 			if (!defaultDate) return defaultDate
 		}
 
@@ -47,6 +49,7 @@ export default defineComponent({
 			subtitle: '',
 			currentDate: getInitialDate()
 		})
+		console.log(state)
 
 		if (props.className) {
 			const className = ref(props.className)
@@ -96,9 +99,9 @@ export default defineComponent({
 		const renderMonth = (date: Date, index: number) => {
 			// const showMonthTitle = index !== 0
 			const showMonthTitle = true
-
+			console.log(state.currentDate)
 			return (
-				<CalendarMonth onClick={onClickDay} date={date} showMonthTitle={showMonthTitle} firstDayOfWeek={dayOffset.value} />
+				<CalendarMonth onClick={onClickDay} date={date} currentDate={state.currentDate} type='single' showMonthTitle={showMonthTitle} firstDayOfWeek={dayOffset.value} />
 			)
 		}
 
