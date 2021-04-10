@@ -21,7 +21,7 @@ export default defineComponent({
 		},
 		onClick: Function,
 		type: String as PropType<CalendarDayType>,
-		currentDate: [String, Array] as PropType<Date | Date[]>
+		currentDate: [Date, Array] as PropType<Date | Date[]>
 	},
 
 	// 定义事件名

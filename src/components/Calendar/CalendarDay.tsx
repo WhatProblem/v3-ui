@@ -40,7 +40,7 @@ export default defineComponent({
 			const Nodes = [text]
 			if (type === 'selected') {
 				return (
-					<div class="selected">{Nodes}</div>
+					<div class="selected-day">{Nodes}</div>
 				)
 			}
 			return Nodes
@@ -52,7 +52,7 @@ export default defineComponent({
 
 		return () => (
 			// const {className} = props.item
-			<div onClick={onClick} role="gridcell" style={style.value} class={["calendar-day", className.value, props.item.className]}>
+			<div onClick={onClick} role="gridcell" style={style.value} class={["calendar-day", className.value]}>
 				{renderContent()}
 			</div>
 		)
