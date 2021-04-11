@@ -1,3 +1,5 @@
+import { CSSProperties } from 'vue'
+
 /**
  * 比较两个日期是否相等
  * @param date1 当前日期
@@ -58,10 +60,40 @@ export function copyDate(dates: Date) {
 
 export function copyDates(dates: Date | Array<Date>) {
 	if (Array.isArray(dates)) {
-		return dates.map((date)=>{
+		return dates.map((date) => {
 			if (!date) return date
 			return copyDate(date)
 		})
 	}
 	return copyDate(dates)
+}
+
+export function isDef<T>(val: T): val is NonNullable<T> {
+	return val !== undefined && val !== null
+}
+
+// 空函数
+export function noop() {}
+
+export function getZIndexStyle(zIndex?: string | number) {
+	const style: CSSProperties = {}
+	if (zIndex !== undefined) {
+		style.zIndex = +zIndex
+	}
+	return style
+}
+
+// 阻止默认行为
+export function stopPropagation(event: Event) {
+	event.stopPropagation()
+}
+
+export function preventDefault(event: Event, isStopPropagation?: boolean) {
+	if (typeof event.cancelable !== 'boolean' || event.cancelable) {
+		event.preventDefault()
+	}
+
+	if (isStopPropagation) {
+		stopPropagation(event)
+	}
 }
